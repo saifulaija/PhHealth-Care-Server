@@ -5,10 +5,12 @@ import router from "./app/routes";
 import httpStatus from "http-status";
 import { globalErrorhandler } from "./app/middlewares/globalErrorHandler";
 import { notFounRoute } from "./app/middlewares/notFoundRoute";
+import cookieParser from 'cookie-parser'
 
 const app: Application = express();
 
 app.use(cors());
+app.use(cookieParser())
 
 //parser
 app.use(express.json());

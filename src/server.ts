@@ -1,4 +1,4 @@
-import { Server } from "https";
+import { Server } from "http";
 import app from "./app";
 
 
@@ -11,3 +11,5 @@ const main = async()=>{
 }
 
 main();
+
+
