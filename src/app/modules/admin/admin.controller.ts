@@ -2,9 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { adminServices } from "./admin.service";
 import { pick } from "../../../shared/pick";
 import { adminFilterableFields } from "./admin.constant";
-import { sendResponse } from "../../../shared/sendResponse";
+
 import httpStatus from "http-status";
-import { catchAsync } from "../../../shared/catchAsync";
+import catchAsync from "../../../shared/catchAsync";
+import sendResponse from "../../../shared/sendResponse";
+
 
 const getAllADmins = catchAsync(async (req, res) => {
   const filters = pick(req.query, adminFilterableFields);

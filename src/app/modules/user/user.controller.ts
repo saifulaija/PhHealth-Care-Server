@@ -1,24 +1,20 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
+import catchAsync from "../../../shared/catchAsync";
+import sendResponse from "../../../shared/sendResponse";
+import httpStatus from "http-status";
 
-const createAdmin = async(req:Request, res:Response)=>{
-    // console.log(req.body)
-try {
-    const result = await userServices.createAdmin(req.body)
-res.status(200).json({
-    success:true,
-    message:'Admin created successfully',
-    data:result
-})
-} catch (err) {
-    res.status(500).json({
-        success:false,
-        message:err?.name ||'some thing went wrong',
-        error:err
-    })
-}
-}
+const createAdmin = catchAsync(async (req: Request, res: Response) => {
+  const result = await userServices.createAdmin(req.body);
 
-export const userControllers={
-    createAdmin
-}
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Admin retrived successfully",
+    data: result,
+  });
+});
+
+export const userControllers = {
+  createAdmin,
+};

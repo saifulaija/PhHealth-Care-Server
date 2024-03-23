@@ -3,9 +3,10 @@ import cors from "cors";
 
 import router from "./app/routes";
 import httpStatus from "http-status";
-import { globalErrorhandler } from "./app/middlewares/globalErrorHandler";
-import { notFounRoute } from "./app/middlewares/notFoundRoute";
+
 import cookieParser from 'cookie-parser'
+import globalErrorhandler from "./app/middlewares/globalErrorHandler";
+import notFounRoute from "./app/middlewares/notFoundRoute";
 
 const app: Application = express();
 

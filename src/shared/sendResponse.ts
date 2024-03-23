@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-export const sendResponse=<T>(res:Response,jsonData:{
+ const sendResponse=<T>(res:Response,jsonData:{
     statusCode:number;
     success:boolean;
     message:string;
@@ -20,3 +20,5 @@ export const sendResponse=<T>(res:Response,jsonData:{
       data: jsonData.data || null || undefined,
     });
   }
+
+  export default sendResponse;
