@@ -18,11 +18,13 @@ model User {
   email              String     @unique
   password           String
   role               UserRole
-  needPasswordChange Boolean @default(true)
+  needPasswordChange Boolean    @default(true)
   status             UserStatus @default(ACTIVE)
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   admin              Admin?
+  doctor             Doctor?
+  Patient            Patient?
 
   @@map("users")
 }
@@ -33,12 +35,50 @@ model Admin {
   email         String   @unique
   profilePhoto  String?
   contactNumber String
-  isDeleted     Boolean @default(false)
+  isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   user          User     @relation(fields: [email], references: [email])
 
   @@map("admins")
+}
+
+model Doctor {
+  id                  String   @id @default(uuid())
+  name                String
+  email               String   @unique
+  profilePhoto        String?
+  contactNumber       String
+  address             String?
+  registrationNumber  String
+  experience          Int      @default(0)
+  gender              Gender
+  appoitmentFee       Int
+  qualification       String
+  currentWorkingPlace String
+  designation         String
+  isDeleted           Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [email], references: [email])
+
+  @@map("doctors")
+}
+
+model Patient {
+  id            String   @id @unique @default(uuid())
+  email         String   @unique
+  name          String
+  profilePhoto  String?
+  contactNumber String?
+  address       String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(references: [email], fields: [email])
+
+  @@map("patients")
 }
 
 enum UserRole {
@@ -51,5 +91,11 @@ enum UserRole {
 enum UserStatus {
   ACTIVE
   bLOCKED
+
   DELETED
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }

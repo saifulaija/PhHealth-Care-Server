@@ -5,7 +5,10 @@ import prisma from "../../../shared/prisma";
 import { IAdminFilterRequest } from "./admin.interface";
 import { IPaginationOptions } from "../../interfaces/paginations";
 
-const getAllADmins = async (params: IAdminFilterRequest, options: IPaginationOptions) => {
+const getAllADmins = async (
+  params: IAdminFilterRequest,
+  options: IPaginationOptions
+) => {
   const { limit, page, skip } = paginationHelper.calculatePagination(options);
   const { searchTerm, ...filterData } = params;
 
@@ -71,7 +74,7 @@ const getAllADmins = async (params: IAdminFilterRequest, options: IPaginationOpt
   };
 };
 
-const getAdminById = async (id: string):Promise<Admin | null> => {
+const getAdminById = async (id: string): Promise<Admin | null> => {
   const result = await prisma.admin.findUnique({
     where: {
       id,
@@ -81,7 +84,10 @@ const getAdminById = async (id: string):Promise<Admin | null> => {
   return result;
 };
 
-const updateAdminData = async (id: string, data: Partial<Admin>):Promise<Admin> => {
+const updateAdminData = async (
+  id: string,
+  data: Partial<Admin>
+): Promise<Admin> => {
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
@@ -99,7 +105,7 @@ const updateAdminData = async (id: string, data: Partial<Admin>):Promise<Admin> 
   return result;
 };
 
-const deleteAdmin = async (id: string):Promise<Admin | null> => {
+const deleteAdmin = async (id: string): Promise<Admin | null> => {
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
@@ -138,7 +144,7 @@ const softDeleteAdmin = async (id: string) => {
       },
     });
 
-     await transactionClient.user.update({
+    await transactionClient.user.update({
       where: {
         email: adminDeletedData.email,
       },
