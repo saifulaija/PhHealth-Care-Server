@@ -12,5 +12,8 @@ router.post('/',  fileUpLoader.upload.single("file"),
   return specialtiesControllers.createSpecialties(req, res, next);
 })
 
+router.get('/', specialtiesControllers.getAllSpecialties)
+router.delete('/:id', specialtiesControllers.deleteSpecialties)
+
 
 export const specialtiesRoutes = router;
