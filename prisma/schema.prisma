@@ -146,11 +146,11 @@ model MedicalReport {
 }
 
 model Schedule {
-  id        String   @id @default(uuid())
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  startDateTime DateTime
+  endDateTime   DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   doctorSchedule DoctorSchedule[]
 
@@ -163,7 +163,7 @@ model DoctorSchedule {
   scheduleId    String
   schedule      Schedule @relation(fields: [scheduleId], references: [id])
   isBooked      Boolean
-  appointmentId String
+  appointmentId String?
 
   @@id([doctorId, scheduleId])
   @@map("doctor_schedules")
