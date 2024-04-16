@@ -64,6 +64,8 @@ model Doctor {
   doctorSpecialties   DoctorSpecialties[]
   doctorSchedule      DoctorSchedule[]
   appoinment          Appoinment[]
+  prescription        Prescription[]
+  review              Review[]
 
   @@map("doctors")
 }
@@ -83,6 +85,8 @@ model Patient {
   patientHealthData PatientHealthData?
   medicalReport     MedicalReport[]
   appoinment        Appoinment[]
+  prescription      Prescription[]
+  review            Review[]
 
   @@map("patients")
 }
@@ -188,6 +192,8 @@ model Appoinment {
   updatedAt      DateTime         @updatedAt
   doctorSchedule DoctorSchedule?
   payment        Payment?
+  prescription   Prescription?
+  review         Review?
 
   @@map("appointments")
 }
@@ -197,13 +203,45 @@ model Payment {
   appointmentId      String        @unique
   appoinment         Appoinment    @relation(fields: [appointmentId], references: [id])
   amount             Float
-  tranasctionId      String
-  status             paymentStatus
+  tranasctionId      String        @unique
+  status             paymentStatus @default(UNPAID)
   paymentGateWayData Json?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
   @@map("payments")
+}
+
+model Prescription {
+  id            String     @id @default(uuid())
+  appointmentId String     @unique
+  appoinment    Appoinment @relation(fields: [appointmentId], references: [id])
+  doctorId      String
+  doctor        Doctor     @relation(fields: [doctorId], references: [id])
+  patientId     String
+  patient       Patient    @relation(fields: [patientId], references: [id])
+  instructions  String
+  followUpDate  DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("prescriptions")
+}
+
+model Review {
+  id            String     @id @default(uuid())
+  patientId     String
+  patient       Patient    @relation(fields: [patientId], references: [id])
+  doctorId      String
+  doctor        Doctor     @relation(fields: [doctorId], references: [id])
+  appointmentId String     @unique
+  appointment   Appoinment @relation(fields: [appointmentId], references: [id])
+  rating        Float
+  comment       String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("reviews")
 }
 
 enum UserRole {

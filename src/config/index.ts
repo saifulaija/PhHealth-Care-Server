@@ -17,4 +17,13 @@ app_pass_email:process.env.APP_PASS_EMAIL
     reset_pass_token: process.env.RESET_PASS_TOKEN,
     reset_token_expires_in: process.env.RESET_TOKEN_EXPIRES_IN,
   },
+  ssl:{
+    storeId:process.env.STORE_ID,
+    storePass:process.env.STORE_PASS,
+    successUrl:process.env.SUCCESS_URL,
+    cancelUl:process.env.CANCEL_URL,
+    failUrl:process.env.FAIL_URL,
+    sslPaymentApi:process.env.SSL_PAYMENT_API,
+    sslValidationApi:process.env.SSL_VALIDATION_API
+  }
 };
