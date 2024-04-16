@@ -63,6 +63,7 @@ model Doctor {
   user                User                @relation(fields: [email], references: [email])
   doctorSpecialties   DoctorSpecialties[]
   doctorSchedule      DoctorSchedule[]
+  appoinment          Appoinment[]
 
   @@map("doctors")
 }
@@ -81,6 +82,7 @@ model Patient {
   user              User               @relation(references: [email], fields: [email])
   patientHealthData PatientHealthData?
   medicalReport     MedicalReport[]
+  appoinment        Appoinment[]
 
   @@map("patients")
 }
@@ -153,6 +155,7 @@ model Schedule {
   updatedAt     DateTime @updatedAt
 
   doctorSchedule DoctorSchedule[]
+  appoinment     Appoinment?
 
   @@map("schedules")
 }
@@ -162,11 +165,28 @@ model DoctorSchedule {
   doctor        Doctor   @relation(fields: [doctorId], references: [id])
   scheduleId    String
   schedule      Schedule @relation(fields: [scheduleId], references: [id])
-  isBooked      Boolean @default(false)
+  isBooked      Boolean  @default(false)
   appointmentId String?
 
   @@id([doctorId, scheduleId])
   @@map("doctor_schedules")
+}
+
+model Appoinment {
+  id             String           @id @default(uuid())
+  patientId      String
+  patient        Patient          @relation(fields: [patientId], references: [id])
+  doctorId       String
+  doctor         Doctor           @relation(fields: [doctorId], references: [id])
+  scheduleId     String           @unique
+  schedule       Schedule         @relation(fields: [scheduleId], references: [id])
+  videoCallingId String
+  status         AppoinmentStatus @default(SCHEDULED)
+  paymentStatus  paymentStatus    @default(UNPAID)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@map("appointments")
 }
 
 enum UserRole {
@@ -202,4 +222,16 @@ enum BloodGroup {
 enum MeritalStatus {
   MERRIED
   UNMERRIED
+}
+
+enum AppoinmentStatus {
+  SCHEDULED
+  INPROGRESS
+  COMPLETED
+  CANCELED
+}
+
+enum paymentStatus {
+  PAID
+  UNPAID
 }
