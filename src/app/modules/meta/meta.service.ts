@@ -1,3 +1,5 @@
+import { authServices } from './../auth/auth.service';
+
 import { UserRole, paymentStatus } from "@prisma/client";
 import { IAuthUser } from "../../interfaces/common";
 import prisma from "../../../shared/prisma";
@@ -37,8 +39,11 @@ const getSuperAdminMetaData = async () => {
       status:paymentStatus.PAID
     }
   });
+
+  const barChartData=await getBarChartData()
+  const pieChartData=await getPieChartData()
   return{
-    appointmentCount,doctorCount,patientCount,paymentCount,totalRevenue,adminCount
+    appointmentCount,doctorCount,patientCount,paymentCount,totalRevenue,adminCount,barChartData,pieChartData
   }
 };
 const getAdminMetaData = async () => {
@@ -55,8 +60,10 @@ const getAdminMetaData = async () => {
       status:paymentStatus.PAID
     }
   });
+  const barChartData=await getBarChartData()
+  const pieChartData=await getPieChartData()
   return{
-    appointmentCount,doctorCount,patientCount,paymentCount,totalRevenue
+    appointmentCount,doctorCount,patientCount,paymentCount,totalRevenue,barChartData,pieChartData
   }
 };
 
@@ -173,6 +180,36 @@ const getPatientMetaData = async (user:IAuthUser) => {
     appointmentCount,prescriptionCount,reviewCount,formatedAppoinmentStatusDistribution
   }
 };
+
+const getBarChartData=async()=>{
+  const appointmentCountByMonth:{month:Date, count:bigint}[]=await prisma.$queryRaw`
+  SELECT DATE_TRUNC('month',"createdAt") AS month,
+  CAST(COUNT(*) AS INTEGER) AS count
+  FROM "appointments"
+  GROUP BY month
+  ORDER BY month ASC 
+  
+  `
+
+ return appointmentCountByMonth
+}
+
+const getPieChartData=async()=>{
+  const appoinmentStatusDistribution = await prisma.appoinment.groupBy({
+    by: ["status"],
+    _count: { id: true },
+   
+  });
+
+  const formatedAppoinmentStatusDistribution = appoinmentStatusDistribution.map(
+    ({ status, _count }) => ({
+      status,
+      count: Number(_count.id),
+    })
+  );
+  return formatedAppoinmentStatusDistribution
+
+}
 
 export const metaServices = {
   fetchDashboardMetaData,
