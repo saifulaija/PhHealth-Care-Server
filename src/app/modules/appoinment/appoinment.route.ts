@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/my-appoinment', auth(UserRole.PATIENT,UserRole.DOCTOR),appoinmentControllers.getMyAppoinment)
 
 router.post('/',auth(UserRole.PATIENT), appoinmentControllers.createAppoinment)
+router.patch('/status/:id',auth(UserRole.ADMIN,UserRole.SUPER_ADMIN,UserRole.DOCTOR), appoinmentControllers.changeAppointmentStatus)
 
 
 
